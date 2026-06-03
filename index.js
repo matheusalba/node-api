@@ -77,7 +77,4 @@ app.listen(PORT, () => {
     console.log(`O Servidor está rodando na porta ${PORT}`);
 })
 
-app.listen(3000, () => {
-    console.log('rodando ok');
-});
 
