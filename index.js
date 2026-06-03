@@ -1,13 +1,14 @@
 const express = require('express');
 
+const PORT = process.env.PORT || 3000;
+
 require('dotenv').config();
 
-const db = require('./db');
+const pool = require('./db');
 
 const { gerarExcel } = require('./Services/excelService');
 
 const app = express();
-
 
 
 app.get('/exportar', async (req,res) => {
@@ -33,15 +34,13 @@ app.get('/exportar', async (req,res) => {
     res.end()
 })
 
-app.get('/', (req, res) => {
-    res.send('Minha API')
-});
+
 
 app.get('/usuariosbanco', async (req, res) => {
 
     try{
-        const result = await db.query(
-            'select * from usuarios'
+        const result = await pool.query(
+            'select * from playing_with_neon'
         );
         res.json(result.rows);
     }catch(err){
@@ -73,6 +72,10 @@ app.get(
         res.json(req.dados)
     }
 )
+
+app.listen(PORT, () => {
+    console.log(`O Servidor está rodando na porta ${PORT}`);
+})
 
 app.listen(3000, () => {
     console.log('rodando ok');
