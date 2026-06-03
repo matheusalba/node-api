@@ -77,4 +77,8 @@ app.listen(PORT, () => {
     console.log(`O Servidor está rodando na porta ${PORT}`);
 })
 
-
+app.get('/', (req, res) => {
+    res.json({
+        status: 'online'
+    });
+});
