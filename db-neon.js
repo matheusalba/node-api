@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-const pool = new Pool({
+const pool_neon = new Pool({
     /*
     host: 'localhost',
     port: 5432,
@@ -14,4 +14,4 @@ const pool = new Pool({
    }
 });
 
-module.exports = pool;
+module.exports = pool_neon;

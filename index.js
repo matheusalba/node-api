@@ -6,7 +6,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3002;
 
-const pool = require('./db');
+const pool_neon = require('./db-neon');
 
 app.use(express.json())
 
@@ -14,7 +14,7 @@ app.use(express.json())
 app.get('/usuariosNeon', async (req, res) => {
 
     try{
-        const result = await pool.query(
+        const result = await pool_neon.query(
             'select * from playing_with_neon'
         );
         res.json(result.rows);
