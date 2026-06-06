@@ -2,41 +2,16 @@ const express = require('express');
 
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+const app = express();
+
+const PORT = process.env.PORT || 3002;
 
 const pool = require('./db');
 
-const { gerarExcel } = require('./Services/excelService');
-
-const app = express();
+app.use(express.json())
 
 
-app.get('/exportar', async (req,res) => {
-    
-    const usuarios = await db.query(
-        'select * from usuarios'
-    );
-
-    const workbook = await gerarExcel(usuarios)
-
-    res.setHeader(
-    'Content-Type',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-
-    res.setHeader(
-    'Content-Disposition',
-    'attachment; filename=usuarios.xlsx'
-    )
-
-    await workbook.xlsx.write(res)
-    
-    res.end()
-})
-
-
-
-app.get('/usuariosbanco', async (req, res) => {
+app.get('/usuariosNeon', async (req, res) => {
 
     try{
         const result = await pool.query(
@@ -73,8 +48,67 @@ app.get(
     }
 )
 
-app.listen(PORT, () => {
-    console.log(`O Servidor está rodando na porta ${PORT}`);
+app.get('/filmes',async (req,res) => {
+    const url = 'https://api.themoviedb.org/3/trending/movie/week?language=pt-BR'
+
+    const options = {
+        method : 'GET', 
+        headers: {
+            accept: 'application/json',
+            Authorization : `Bearer ${process.env.TMDB_BEARER_TOKEN}`
+        }
+    };
+
+    try{
+        const response = await fetch(url, options);
+
+        if(!response.ok){
+            return res.status(response.status).json({
+                error: 'Erro ao buscar dados no TMDB'
+            });
+        }
+       
+        const data = await response.json()
+
+        return res.json(data)    
+
+    }catch(e){
+        console.log('Problema:',e)
+        return res.status(500).json({error: 'erro '})
+    }
+
+
+})
+
+app.get('/week',(req,res) => {
+
+    const url = 'https://api.themoviedb.org/3/trending/movie/week'
+
+    const opc = {
+        methot: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization : `Bearer ${process.env.TMDB_BEARER_TOKEN}`
+        }
+    }
+
+    fetch(url, opc)
+    .then(response => {
+        if(!response.ok){
+            return res.status(response.status).json({
+                error: 'Erro ao buscar dados no TMDB'
+            })
+        }
+        return response.json()
+    })
+    .then(data => {
+        const films = data.results.filter(filme => filme.vote_average > 7.5)
+        res.json(films) 
+    })
+    .catch(e => {
+        console.log('Problema:',e)
+        return res.status(500).json({error: 'erro '})
+    })
 })
 
 app.get('/', (req, res) => {
@@ -82,3 +116,7 @@ app.get('/', (req, res) => {
         status: 'online'
     });
 });
+
+app.listen(PORT, () => {
+    console.log(`O Servidor está rodando na porta ${PORT}`);
+})
