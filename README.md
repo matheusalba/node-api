@@ -1,8 +1,8 @@
 07/06/2026 - Próximos passos 
 
-O Web Scraping (Extração)
-Armazenamento (Carga) 
-O Relatório com IA (Transformação e Valor)
+O Web Scraping (Extração) ; 
+Armazenamento (Carga) ;
+O Relatório com IA (Transformação e Valor) ;
 Automação Pura com node-cron
 
 ## 🏗️ Arquitetura do Sistema & Pipeline ETL
