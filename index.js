@@ -135,7 +135,7 @@ app.post('/register', async (req, res) => {
     }
 );
 
-app.get('/usuariosNeon', async (req, res) => {
+app.get('/usuariosNeon', verificarToken, async (req, res) => {
 
     try {
         const result = await pool_neon.query(
@@ -152,9 +152,9 @@ app.get('/usuariosNeon', async (req, res) => {
 
 app.get(
     '/usuarios',
-    /*
+    
     verificarToken,
-
+    /*
     carregarUsuario,
 
     verificarPermissao
@@ -172,7 +172,7 @@ app.get(
     }
 )
 
-app.get('/filmes', async (req, res) => {
+app.get('/filmes',verificarToken ,async (req, res) => {
     const url = 'https://api.themoviedb.org/3/trending/movie/week?language=pt-BR'
 
     const options = {
@@ -204,7 +204,7 @@ app.get('/filmes', async (req, res) => {
 
 })
 
-app.get('/week', async (req, res) => {
+app.get('/week',verificarToken,async (req, res) => {
     console.log(`olá Bearer ${process.env.TMDB_BEARER_TOKEN}`)
     const url = 'https://api.themoviedb.org/3/trending/movie/week'
 
@@ -264,7 +264,7 @@ app.get('/week', async (req, res) => {
 
 app.get('/', (req, res) => {
     res.json({
-        status: 'online'
+        status: 'online hehe Valeu RENDER!'
     });
 });
 
